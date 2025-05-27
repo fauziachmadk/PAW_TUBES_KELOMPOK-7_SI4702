@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('buku_id')->constrained();
+            $table->text('catatan_opsional')->nullable();
             $table->timestamps();
         });
     }
