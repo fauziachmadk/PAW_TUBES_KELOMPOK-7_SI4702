@@ -26,7 +26,6 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-4">
-            {{-- Tambahkan gambar di sini --}}
                 <img src="{{ asset('storage/images/TelkomLogo.png') }}" alt="Logo" class="mx-auto d-block mb-3" style="width: 300px;">
             <div class="card shadow">
                 <div class="card-header text-center">
