@@ -13,6 +13,7 @@ class BookController extends Controller
         $books = Buku::all();
         return view('admin.books.index', compact('books'));
     }
+    
     public function create()
     {
         return view('admin.books.create');
@@ -38,8 +39,16 @@ class BookController extends Controller
 
         $buku->update($validated);
         return redirect()->route('books.index')->with('success', 'Buku berhasil diperbarui!');
-        
     }
 
-    
+    public function destroy($id)
+    {
+        $buku = Buku::findOrFail($id);
+        if ($buku->gambar_buku) {
+            Storage::disk('public')->delete($buku->gambar_buku);
+        }
+
+        $buku->delete();
+        return redirect()->route('books.index')->with('success', 'Buku berhasil dihapus!');
+    }
 }
