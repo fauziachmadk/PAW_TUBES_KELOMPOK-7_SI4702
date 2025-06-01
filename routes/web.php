@@ -6,6 +6,7 @@ use App\Http\Middleware\IsAdmin;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AnggotaController;
 use App\Http\Controllers\PeminjamanController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', function () {
     if (auth()->check()) {
@@ -57,5 +58,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/anggota/peminjaman', [PeminjamanController::class, 'storeUser'])->name('anggota.peminjaman.store');
     Route::get('/anggota/profil', [AnggotaController::class, 'profil'])->name('anggota.profil')->middleware('auth');
 
-
+    
 });
