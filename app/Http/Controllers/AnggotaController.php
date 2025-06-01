@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\User;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
@@ -80,3 +79,4 @@ class AnggotaController extends Controller
         return view('user.profile.profil', compact('user', 'peminjamans'));
     }
 }
+
