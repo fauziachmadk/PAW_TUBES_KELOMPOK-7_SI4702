@@ -2,63 +2,63 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peminjaman;
+use App\Models\Buku;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $peminjamans = Peminjaman::with(['user', 'buku'])->get();
+        return view('admin.peminjaman.index', compact('peminjamans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function storeUser(Request $request)
     {
-        //
+        $request->validate([
+            'buku_id' => 'required|exists:bukus,id',
+        ]);
+
+        Peminjaman::create([
+            'user_id' => Auth::id(),
+            'buku_id' => $request->buku_id,
+            'tanggal_pinjam' => now(),
+            'status' => 'pinjam',
+        ]);
+
+        return redirect()->back()->with('success', 'Buku berhasil dipinjam!');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function edit($id)
     {
-        //
+        $peminjaman = Peminjaman::findOrFail($id);
+        return view('admin.peminjaman.edit', compact('peminjaman'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:pinjam,kembali',
+            'tanggal_kembali' => 'nullable|date',
+        ]);
+
+        $peminjaman->update([
+            'status' => $request->status,
+            'tanggal_kembali' => $request->status === 'kembali' ? now() : null,
+        ]);
+
+        return redirect()->route('peminjaman.index')->with('success', 'Status peminjaman diperbarui!');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy($id)
     {
-        //
-    }
+        $peminjaman = Peminjaman::findOrFail($id);
+        $peminjaman->delete();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->back()->with('success', 'Data peminjaman dihapus.');
     }
 }
